@@ -74,7 +74,6 @@ public class APIClient {
                 .when()
                 .get(ApiEndpoints.BOOKING.getPath() + "/" + id) // Используем ENUM для эндпоинта /ping
                 .then()
-                .statusCode(200)
                 .extract()
                 .response();
     }
@@ -114,6 +113,19 @@ public class APIClient {
                 .then()
                 .log().all()
                 .statusCode(201)
+                .extract()
+                .response();
+    }
+
+    // POST запрос на эндпоинт /booking для создания бронирования
+    public Response createBooking(String newBooking) {
+        return getRequestSpec()
+                .body(newBooking)
+                .log().all()
+                .when()
+                .post(ApiEndpoints.BOOKING.getPath())
+                .then()
+                .log().all()
                 .extract()
                 .response();
     }

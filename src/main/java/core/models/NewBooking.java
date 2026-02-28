@@ -1,6 +1,6 @@
 package core.models;
 
-public class ExistingBooking {
+public class NewBooking {
     private String firstname;
     private String lastname;
     private int totalprice;
@@ -59,6 +59,13 @@ public class ExistingBooking {
     public static class Bookingdates{
         public String checkin;
         public String checkout;
+
+        public Bookingdates() {}
+
+        public Bookingdates(String checkin, String checkout) {
+            this.checkin = checkin;
+            this.checkout = checkout;
+        }
 
         public String getCheckin() {
             return checkin;
