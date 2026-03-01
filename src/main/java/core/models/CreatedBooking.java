@@ -1,5 +1,8 @@
 package core.models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class CreatedBooking {
     private int bookingid;
     private NewBooking booking;

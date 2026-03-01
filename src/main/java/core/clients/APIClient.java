@@ -129,4 +129,17 @@ public class APIClient {
                 .extract()
                 .response();
     }
+
+    public Response updateBooking(int bookingId, String newBooking) {
+        return getRequestSpec()
+                .pathParam("id", bookingId) // Указываем path parametr для ID
+                .body(newBooking)
+                .log().all()
+                .when()
+                .put(ApiEndpoints.BOOKING.getPath() + "/{id}")
+                .then()
+                .log().all()
+                .extract()
+                .response();
+    }
 }
