@@ -1,5 +1,6 @@
 package tests;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import core.clients.APIClient;
@@ -13,15 +14,15 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class PutBookingTest {
+public class PatchBookingTest {
     private APIClient apiClient;
     private ObjectMapper objectMapper;
     private CreatedBooking createdBooking;
     private NewBooking newBooking;
-    private NewBooking updatedBooking;
+    private int bookingId;
 
     @BeforeEach
-    public void setup() {
+    public void setup() throws JsonProcessingException {
         apiClient = new APIClient();
         objectMapper = new ObjectMapper();
         apiClient.createToken("admin", "password123");
@@ -35,19 +36,6 @@ public class PutBookingTest {
         newBooking.setBookingdates(new NewBooking.Bookingdates("2020-01-01", "2025-02-02"));
         newBooking.setAdditionalneeds("Breakfast");
 
-        // Создаем объект updatedBooking, на который будем обновлять newBooking
-        updatedBooking = new NewBooking();
-        updatedBooking.setFirstname("Frosya");
-        updatedBooking.setLastname("Semenova");
-        updatedBooking.setTotalprice(555);
-        updatedBooking.setDepositpaid(false);
-        updatedBooking.setBookingdates(new NewBooking.Bookingdates("2021-01-01", "2025-02-02"));
-        updatedBooking.setAdditionalneeds("Breakfast");
-    }
-
-    @Test
-    public void testPutBooking() throws JsonProcessingException {
-
         // Выполняем запрос на создание newBooking через APIClient
         String requestBody = objectMapper.writeValueAsString(newBooking);
         Response response = apiClient.createBooking(requestBody);
@@ -58,30 +46,42 @@ public class PutBookingTest {
         createdBooking = objectMapper.readValue(responseBody, CreatedBooking.class);
 
         // Запоминаем id созданного бронирования
-        int bookingId = createdBooking.getBookingid();
+        bookingId = createdBooking.getBookingid();
+    }
 
-        // Выполняем запрос на обновление newBooking на updatedBooking через APIClient
-        String requestUpdatedBookingBody = objectMapper.writeValueAsString(updatedBooking);
-        Response responseUpdatedBooking = apiClient.updateBooking(bookingId, requestUpdatedBookingBody);
-        assertThat(responseUpdatedBooking.getStatusCode()).isEqualTo(200);
+    @Test
+    public void testPatchBooking() throws JsonProcessingException {
+        // Подготавливаем объект с частичными данными для обновления
+        NewBooking patchData = new NewBooking();
+        patchData.setTotalprice(9999);
+        patchData.setAdditionalneeds("Alcohol");
+
+        // Настраиваем ObjectMapper для игнорирования null-полей при сериализации
+        ObjectMapper patchMapper = new ObjectMapper();
+        patchMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        String patchBody = patchMapper.writeValueAsString(patchData);
+
+        // Выполняем запрос на частичное обновление newBooking через APIClient
+        Response patchResponse = apiClient.partlyUpdateBooking(bookingId, patchBody);
+        assertThat(patchResponse.getStatusCode()).isEqualTo(200);
 
         // Получаем объект обновленного бронирования по id
-        Response responseGetUpdatedBooking = apiClient.getBookingById(bookingId);
-        assertThat(responseGetUpdatedBooking.getStatusCode()).isEqualTo(200);
+        Response getPatchResponse = apiClient.getBookingById(bookingId);
+        assertThat(getPatchResponse.getStatusCode()).isEqualTo(200);
 
         // Десериализуем тело ответа в объект getUpdatedBooking
-        String responseGetUpdatedBookingBody = responseGetUpdatedBooking.asString();
-        NewBooking getUpdatedBooking = objectMapper.readValue(responseGetUpdatedBookingBody, NewBooking.class);
+        String getPatchResponseBody = getPatchResponse.asString();
+        NewBooking patchedBooking = objectMapper.readValue(getPatchResponseBody, NewBooking.class);
 
-        // Проверяем, что объект getUpdatedBooking, полученный по id, соответствует объекту updatedBooking, на который мы обновили объект newBooking
-        assertThat(getUpdatedBooking).isNotNull();
-        assertEquals(getUpdatedBooking.getFirstname(), updatedBooking.getFirstname());
-        assertEquals(getUpdatedBooking.getLastname(), updatedBooking.getLastname());
-        assertEquals(getUpdatedBooking.getTotalprice(), updatedBooking.getTotalprice());
-        assertEquals(getUpdatedBooking.getDepositpaid(), updatedBooking.getDepositpaid());
-        assertEquals(getUpdatedBooking.getBookingdates().getCheckin(), updatedBooking.getBookingdates().getCheckin());
-        assertEquals(getUpdatedBooking.getBookingdates().getCheckout(), updatedBooking.getBookingdates().getCheckout());
-        assertEquals(getUpdatedBooking.getAdditionalneeds(), updatedBooking.getAdditionalneeds());
+        // Проверяем, что изменённые поля обновились, а остальные остались прежними
+        assertThat(patchedBooking).isNotNull();
+        assertEquals(patchedBooking.getTotalprice(), patchData.getTotalprice());
+        assertEquals(patchedBooking.getAdditionalneeds(), patchData.getAdditionalneeds());
+        assertEquals(patchedBooking.getFirstname(), createdBooking.getBooking().getFirstname());
+        assertEquals(patchedBooking.getLastname(), createdBooking.getBooking().getLastname());
+        assertEquals(patchedBooking.getBookingdates().getCheckin(), createdBooking.getBooking().getBookingdates().getCheckin());
+        assertEquals(patchedBooking.getDepositpaid(), createdBooking.getBooking().getDepositpaid());
+        assertEquals(patchedBooking.getBookingdates().getCheckout(), createdBooking.getBooking().getBookingdates().getCheckout());
     }
 
     @AfterEach

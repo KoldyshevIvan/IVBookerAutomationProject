@@ -35,7 +35,7 @@ public class CreateBookigTest {
     }
 
     @Test
-    public void testCreateBookig() throws JsonProcessingException {
+    public void testCreateBooking() throws JsonProcessingException {
 
         // Выполняем запрос к эндпоинту  /booking  через APIClient
         String requestBody = objectMapper.writeValueAsString(newBooking);
