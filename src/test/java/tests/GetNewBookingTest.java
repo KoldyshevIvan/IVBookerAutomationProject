@@ -26,7 +26,7 @@ public class GetNewBookingTest {
         Response response = apiClient.getBookingById(73);
         assertThat(response.getStatusCode()).isEqualTo(200);
 
-        // Десериализуем тело ответа в список объектов Booking
+        // Десериализуем тело ответа в объект Booking
         String responseBody = response.getBody().asString();
         NewBooking newBooking = objectMapper.readValue(responseBody, NewBooking.class);
 
