@@ -155,4 +155,17 @@ public class APIClient {
                 .extract()
                 .response();
     }
+
+    public Response getFilteredBooking(String firstname, String lastname) {
+        return getRequestSpec()
+                .when()
+                .queryParam("firstname", firstname)
+                .queryParam("lastname", lastname)
+                .log().all()
+                .get(ApiEndpoints.BOOKING.getPath())
+                .then()
+                .log().all()
+                .extract()
+                .response();
+    }
 }
