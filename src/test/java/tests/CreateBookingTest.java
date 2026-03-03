@@ -23,7 +23,7 @@ public class CreateBookingTest {
     private ObjectMapper objectMapper;
     private CreatedBooking createdBooking;
     private NewBooking newBooking;
-    Response response;
+    private Response response;
 
     @BeforeEach
     public void setup() {
