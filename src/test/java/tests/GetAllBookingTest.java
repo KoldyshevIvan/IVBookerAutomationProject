@@ -7,6 +7,10 @@ import core.clients.APIClient;
 import core.models.Booking;
 import core.models.CreatedBooking;
 import core.models.NewBooking;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Owner;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,6 +43,9 @@ public class GetAllBookingTest {
     }
 
     @Test
+    @Feature("Booking")
+    @Severity(SeverityLevel.CRITICAL)
+    @Owner("Ivan Koldyshev")
     public void testGetAllBooking() throws JsonProcessingException {
 
         // Выполняем запрос к эндпоинту  /booking  через APIClient

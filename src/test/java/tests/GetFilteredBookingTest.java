@@ -7,6 +7,10 @@ import core.clients.APIClient;
 import core.models.Booking;
 import core.models.CreatedBooking;
 import core.models.NewBooking;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Owner;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,6 +41,9 @@ public class GetFilteredBookingTest {
             "Aleksandr, Shalchinov, 102, true, 2021-21-21, 2022-22-22, Pub"
             //"Josh, Allen, 103, false, 2023-21-21, 2023-22-22, Pub"
     })
+    @Feature("Booking")
+    @Severity(SeverityLevel.CRITICAL)
+    @Owner("Ivan Koldyshev")
     public void testGetFilteredBooking
             (String firstname, String lastname, Integer totalprice, Boolean depositpaid, String checkin, String checkout, String additionalneeds) throws JsonProcessingException {
         newBooking = new NewBooking();
