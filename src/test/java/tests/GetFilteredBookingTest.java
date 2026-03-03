@@ -37,9 +37,8 @@ public class GetFilteredBookingTest {
 
     @ParameterizedTest
     @CsvSource({
-            "Jane, Doe, 101, true, 2020-02-02, 2020-03-03, Bar",
+            "Jana, Doe, 101, true, 2020-02-02, 2020-03-03, Bar",
             "Aleksandr, Shalchinov, 102, true, 2021-21-21, 2022-22-22, Pub"
-            //"Josh, Allen, 103, false, 2023-21-21, 2023-22-22, Pub"
     })
     @Feature("Booking")
     @Severity(SeverityLevel.CRITICAL)
@@ -67,7 +66,7 @@ public class GetFilteredBookingTest {
         Response getFilteredResponse = apiClient.getFilteredBooking(firstname, lastname);
         assertThat(getFilteredResponse.getStatusCode()).isEqualTo(200);
 
-        // Десериализуем тело ответа в объект filteredBooking
+        // Десериализуем тело ответа в список объектов filteredBookings
         String responseFilteredBody = getFilteredResponse.asString();
         List<Booking> filteredBookings = objectMapper.readValue(responseFilteredBody, new TypeReference<List<Booking>>() {
         });
