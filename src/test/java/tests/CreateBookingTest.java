@@ -1,6 +1,5 @@
 package tests;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import core.clients.APIClient;
 import core.models.CreatedBooking;
@@ -30,7 +29,6 @@ public class CreateBookingTest {
         apiClient = new APIClient();
         objectMapper = new ObjectMapper();
 
-        // Создаем объект newBooking с необходимыми данными
         step("Создать объект для нового бронирования", () -> {
                     newBooking = new NewBooking();
                     newBooking.setFirstname("Ivan");
@@ -47,7 +45,7 @@ public class CreateBookingTest {
     @Feature("Booking")
     @Severity(SeverityLevel.CRITICAL)
     @Owner("Ivan Koldyshev")
-    public void testCreateBooking() throws JsonProcessingException {
+    public void testCreateBooking() {
 
         step("Отправить JSON на энпоинт /booking и создать новое бронирование", () ->
                 {
@@ -61,7 +59,6 @@ public class CreateBookingTest {
                 }
         );
 
-        // Проверяем, что тело ответа содержит объект нового бронирования
         step("Проверить параметры созданного бронирования", () -> {
                     assertThat(createdBooking).isNotNull();
                     assertEquals(createdBooking.getBooking().getFirstname(), newBooking.getFirstname());
@@ -77,7 +74,7 @@ public class CreateBookingTest {
 
     @AfterEach
     public void tearDown() {
-        // Удаляем созданное бронирование
+
         step("Удалить созданное бронирование", () -> {
                     apiClient.createToken("admin", "password123");
                     apiClient.deleteBooking(createdBooking.getBookingid());
