@@ -79,7 +79,7 @@ public class PatchBookingTest {
                 {
                     ObjectMapper patchMapper = new ObjectMapper();
                     patchMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-                    String patchBody = patchMapper.writeValueAsString(patchData);
+                    patchBody = patchMapper.writeValueAsString(patchData);
                 }
         );
 
