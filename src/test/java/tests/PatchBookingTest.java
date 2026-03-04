@@ -58,7 +58,6 @@ public class PatchBookingTest {
                     createdBooking = objectMapper.readValue(responseBody, CreatedBooking.class);
                 }
         );
-
         bookingId = createdBooking.getBookingid();
     }
 
