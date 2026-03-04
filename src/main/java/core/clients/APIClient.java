@@ -74,7 +74,6 @@ public class APIClient {
                 .when()
                 .get(ApiEndpoints.BOOKING.getPath() + "/" + id) // Используем ENUM для эндпоинта /ping
                 .then()
-                .statusCode(200)
                 .extract()
                 .response();
     }
@@ -114,6 +113,58 @@ public class APIClient {
                 .then()
                 .log().all()
                 .statusCode(201)
+                .extract()
+                .response();
+    }
+
+    // POST запрос на эндпоинт /booking для создания бронирования
+    public Response createBooking(String newBooking) {
+        return getRequestSpec()
+                .body(newBooking)
+                .log().all()
+                .when()
+                .post(ApiEndpoints.BOOKING.getPath())
+                .then()
+                .log().all()
+                .extract()
+                .response();
+    }
+
+    public Response updateBooking(int bookingId, String newBooking) {
+        return getRequestSpec()
+                .pathParam("id", bookingId) // Указываем path parametr для ID
+                .body(newBooking)
+                .log().all()
+                .when()
+                .put(ApiEndpoints.BOOKING.getPath() + "/{id}")
+                .then()
+                .log().all()
+                .extract()
+                .response();
+    }
+
+    public Response partlyUpdateBooking(int bookingId, String newBooking) {
+        return getRequestSpec()
+                .pathParam("id", bookingId) // Указываем path parametr для ID
+                .body(newBooking)
+                .log().all()
+                .when()
+                .patch(ApiEndpoints.BOOKING.getPath() + "/{id}")
+                .then()
+                .log().all()
+                .extract()
+                .response();
+    }
+
+    public Response getFilteredBooking(String firstname, String lastname) {
+        return getRequestSpec()
+                .when()
+                .queryParam("firstname", firstname)
+                .queryParam("lastname", lastname)
+                .log().all()
+                .get(ApiEndpoints.BOOKING.getPath())
+                .then()
+                .log().all()
                 .extract()
                 .response();
     }

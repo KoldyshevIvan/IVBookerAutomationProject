@@ -1,10 +1,10 @@
 package core.models;
 
-public class ExistingBooking {
+public class NewBooking {
     private String firstname;
     private String lastname;
-    private int totalprice;
-    private boolean depositpaid;
+    private Integer totalprice;
+    private Boolean depositpaid;
     private Bookingdates bookingdates;
     private String additionalneeds;
 
@@ -24,19 +24,19 @@ public class ExistingBooking {
         this.lastname = lastname;
     }
 
-    public int getTotalprice() {
+    public Integer getTotalprice() {
         return totalprice;
     }
 
-    public void setTotalprice(int totalprice) {
+    public void setTotalprice(Integer totalprice) {
         this.totalprice = totalprice;
     }
 
-    public boolean getDepositpaid() {
+    public Boolean getDepositpaid() {
         return depositpaid;
     }
 
-    public void setDepositpaid(boolean depositpaid) {
+    public void setDepositpaid(Boolean depositpaid) {
         this.depositpaid = depositpaid;
     }
 
@@ -59,6 +59,13 @@ public class ExistingBooking {
     public static class Bookingdates{
         public String checkin;
         public String checkout;
+
+        public Bookingdates() {}
+
+        public Bookingdates(String checkin, String checkout) {
+            this.checkin = checkin;
+            this.checkout = checkout;
+        }
 
         public String getCheckin() {
             return checkin;

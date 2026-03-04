@@ -1,6 +1,10 @@
 package tests;
 
 import core.clients.APIClient;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Owner;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +23,9 @@ public class HealthCheckTests {
 
     //Тест на метод ping()
     @Test
+    @Feature("Booking")
+    @Severity(SeverityLevel.CRITICAL)
+    @Owner("Ivan Koldyshev")
     public void testPing(){
         Response response = apiClient.ping();
         assertThat(response.getStatusCode()).isEqualTo(201);
