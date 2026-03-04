@@ -81,10 +81,10 @@ public class PutBookingTest {
                 {
                     String requestUpdatedBookingBody = objectMapper.writeValueAsString(updatedBooking);
                     responseUpdatedBooking = apiClient.updateBooking(bookingId, requestUpdatedBookingBody);
-                    step("Проверить, что статус-код ответа == 200", () ->
+                    step("Проверить, что статус-код ответа на обновление бронирования == 200", () ->
                             assertThat(responseUpdatedBooking.getStatusCode()).isEqualTo(200));
                     Response responseGetUpdatedBooking = apiClient.getBookingById(bookingId);
-                    step("Проверить, что статус-код ответа == 200", () ->
+                    step("Проверить, что статус-код ответа на запрос бронирования по id == 200", () ->
                             assertThat(responseGetUpdatedBooking.getStatusCode()).isEqualTo(200));
                     String responseGetUpdatedBookingBody = responseGetUpdatedBooking.asString();
                     getUpdatedBooking = objectMapper.readValue(responseGetUpdatedBookingBody, NewBooking.class);
